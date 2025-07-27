@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prediction | {{ quote }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static', filename='styles/results.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container py-5">
+
+  <!-- Title -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Stock Forecast: <span class="text-primary">{{ quote }}</span></h1>
+    <p class="text-muted">AI-powered predictions for the next closing price</p>
+  </div>
+
+  <!-- Prediction Cards -->
+  <div class="row text-center g-4 mb-4">
+    <div class="col-md-3">
+      <div class="model-box">
+        <div class="model-header">ARIMA Prediction</div>
+        <h2 class="text-success">${{ arima_pred }}</h2>
+        <small class="text-muted">RMSE: {{ error_arima }}</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="model-box">
+        <div class="model-header">LSTM Prediction</div>
+        <h2 class="text-primary">${{ lstm_pred }}</h2>
+        <small class="text-muted">RMSE: {{ error_lstm }}</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="model-box">
+        <div class="model-header">Linear Regression</div>
+        <h2 class="text-danger">${{ lr_pred }}</h2>
+        <small class="text-muted">RMSE: {{ error_lr }}</small>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="model-box">
+        <div class="model-header">XGBoost Prediction</div>
+        <h2 class="text-warning">${{ xgb_pred | round(2) if xgb_pred is defined else "N/A" }}</h2>
+        <small class="text-muted">RMSE: {{ error_xgb }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommendation -->
+  {% if idea and decision %}
+  <div class="text-center mt-4 mb-5">
+    <h4 class="mb-3">Investment Recommendation</h4>
+    <h2>
+      {% if decision == 'BUY' %}
+        <span class="badge bg-success px-4 py-2 fs-5">BUY</span>
+      {% else %}
+        <span class="badge bg-danger px-4 py-2 fs-5">SELL</span>
+      {% endif %}
+    </h2>
+    <p class="text-muted mt-2">Based on predicted trend and current price vs average forecast.</p>
+  </div>
+  {% endif %}
+
+  <!-- Today's Stock Data -->
+  <div class="card mb-5">
+  <div class="card-header text-center fw-bold">Today's Stock Snapshot</div>
+  <div class="card-body row text-center">
+    <div class="col"><strong>Current Price:</strong><br>
+      {% if current_price != 'Unavailable' %}
+        ${{ current_price }}
+      {% else %}
+        <span class="text-muted">Unavailable</span>
+      {% endif %}
+    </div>
+    <div class="col"><strong>Open:</strong><br>${{ open_s }}</div>
+    <div class="col"><strong>Close:</strong><br>${{ close_s }}</div>
+    <div class="col"><strong>High:</strong><br>${{ high_s }}</div>
+    <div class="col"><strong>Low:</strong><br>${{ low_s }}</div>
+    <div class="col"><strong>Volume:</strong><br>{{ vol }}</div>
+    <div class="col"><strong>Adj Close:</strong><br>${{ adj_close }}</div>
+  </div>
+</div>
+
+
+
+
+  <!-- Unified 7-Day Forecast Table -->
+  {% if forecast_set and xgb_forecast and forecast_set_lstm %}
+  <div class="mb-5">
+    <h4 class="text-center mb-4">7-Day Forecast Comparison</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Day</th>
+            <th>Linear Regression</th>
+            <th>XGBoost</th>
+            <th>LSTM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(0, 7) %}
+          <tr>
+            <td>Day {{ i + 1 }}</td>
+            <td>{{ forecast_set[i] | round(2) }}</td>
+            <td>{{ xgb_forecast[i] | round(2) }}</td>
+            <td>{{ forecast_set_lstm[i] | round(2) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-muted text-center">Side-by-side comparison of 7-day forecasted prices from different models.</p>
+  </div>
+  {% endif %}
+
+  <!-- Model Graphs -->
+  <div class="section-title text-center mt-5 mb-3">
+    <h4>Model Visualizations</h4>
+    <p class="text-muted">Each model's performance vs actual stock prices</p>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-3">
+      <img src="{{ url_for('static', filename='Trends.png') }}" class="img-fluid graph-img" alt="Trends">
+      <p class="text-center mt-2">Stock Price Trends</p>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <img src="{{ url_for('static', filename='ARIMA.png') }}" class="img-fluid graph-img" alt="ARIMA">
+      <p class="text-center mt-2">ARIMA Model</p>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <img src="{{ url_for('static', filename='LSTM.png') }}" class="img-fluid graph-img" alt="LSTM">
+      <p class="text-center mt-2">LSTM Model</p>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <img src="{{ url_for('static', filename='LR.png') }}" class="img-fluid graph-img" alt="Linear Regression">
+      <p class="text-center mt-2">Linear Regression</p>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <img src="{{ url_for('static', filename='XGB.png') }}" class="img-fluid graph-img" alt="XGBoost">
+      <p class="text-center mt-2">XGBoost</p>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center mt-5">
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Predict Another Stock</a>
+  </div>
+</div>
+
+</body>
+</html>
