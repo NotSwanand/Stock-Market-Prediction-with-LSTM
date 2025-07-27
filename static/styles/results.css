@@ -1,0 +1,56 @@
+body {
+    background-color: #f5f7fa;
+    font-size: 1.1rem;
+  }
+  
+  h1, h2, h4, h5, p {
+    font-size: inherit;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h4 {
+    font-size: 1.5rem;
+  }
+  p, .text-muted, .model-header {
+    font-size: 1.15rem;
+  }
+  
+  .card, .model-box {
+    padding: 30px;
+  }
+  
+  .graph-img {
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    max-height: 420px;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .model-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 1.15rem;
+  }
+  
+  .fs-3, .fs-5, h2 {
+    font-size: 2rem !important;
+  }
+  
+  .badge-buy {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .badge-sell {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  

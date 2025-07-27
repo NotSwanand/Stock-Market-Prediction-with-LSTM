@@ -1,0 +1,98 @@
+body {
+    background: url("../stockmarket.gif") no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.15rem;
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  .bg-overlay {
+    background-color: rgba(0, 0, 0, 0.7); /* dark overlay for readability */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .content-box {
+    max-width: 800px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  }
+  
+  .logo-img {
+    max-height: 140px;
+    object-fit: contain;
+  }
+  
+  h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+  }
+  
+  .lead {
+    font-size: 1.25rem;
+    color: #ccc;
+  }
+  
+  input.form-control {
+    background-color: #fff;
+    border-radius: 8px;
+    font-size: 1.1rem;
+  }
+  
+  .btn-success {
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+  
+  /* Loader styles */
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.loader-spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #00d1b2;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-text {
+  max-width: 80%;
+  font-style: italic;
+  opacity: 0.9;
+}
